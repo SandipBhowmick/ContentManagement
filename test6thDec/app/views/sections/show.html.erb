@@ -1,4 +1,4 @@
-<%= link_to("<< Back to List", {:action => 'index',:page_id =>@page.id}, :class => 'back-link') %>
+<%= link_to("<< Back to List", {:action => 'index',:page_id =>@section.page_id}, :class => 'back-link') %>
 
 <div class="sections show">
   <h2>Show Section</h2>
@@ -18,7 +18,7 @@
     </tr>
     <tr>
       <th>Visible?</th>
-      <td><%= @section.visibel ? 'true' : 'false' %></td>
+      <td><%= @section.visible ? 'true' : 'false' %></td>
     </tr>
     <tr>
     <tr>

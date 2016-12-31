@@ -12,7 +12,7 @@ class SectionsController < ApplicationController
     @sections = @page.sections.sorted
   end
 
-  def show
+  def show   
     @section = Section.find(params[:id])
   end
 
@@ -25,8 +25,10 @@ class SectionsController < ApplicationController
   def create
     @section = Section.new(section_params)
     if @section.save 
-      flash[:notice]= "Section created successfully."
-      redirect_to(:action =>'index', :page_id =>@page.id)
+      flash[:notice]= "Section created successfully." 
+      redirect_to(:action =>'index', :page_id => @section.page_id)
+      #redirect_to({:action => 'show',:id=>@section.id, :page_id =>params[:page_id]})
+      #redirect_to :index, :page_id =>params[:page_id]
     else
       @pages = @page.subject.pages.sorted
       @section_count = Section.count + 1 
@@ -48,9 +50,8 @@ class SectionsController < ApplicationController
     
     #@pages = @page.subject.pages.sorted
     if @section.update_attributes(section_params)
-      @a=@section_id
-      flash[:notice]= "Section updated successfully."
-      redirect_to({:action => 'show',:section_id=>@a, :page_id =>@page.id})
+       flash[:notice]= "Section updated successfully."
+      redirect_to({:action => 'show',:id=>@section.id, :page_id =>params[:page_id]})
     else
       @pages = @page.subject.pages.sorted
       @section_count = Section.count
@@ -67,27 +68,21 @@ class SectionsController < ApplicationController
   def destroy
      section = Section.find(params[:id]).destroy
      flash[:notice]= "Section '#{section.name}' destroyed successfully."
-     redirect_to(:controller=>'section',:page_id =>params[:page_id])
+     redirect_to(:action =>'index', :page_id => section.page_id)
      #redirect_to(:action => 'index', :page_id => @page.id)
   end
   
-  
-  def find_page
-    if params[:page_id]
-      @page=Page.find(params[:page_id])
-    end
-  end
-
   private
 
   def section_params
-    params.require(:section).permit(:page_id,:name, :position, :visibel, :content_type, :content)
+    params.require(:section).permit(:page_id,:name, :position, :visible, :content_type, :content)
   end 
-
-
   
-
-  
+  def find_page
+    if params[:page_id]
+      @page=Page.find(params[:page_id])      
+    end
+  end
 
 
 end
